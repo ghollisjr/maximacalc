@@ -1,14 +1,10 @@
-/* TODO:
-   * Temperature conversions, best implemented with a function call
-   IMO.
-*/
 /* The base unit system I use in these definitions is the S.I. system
   of units.
 
   The method for using these definitions to actually do unit
-  conversions is as follows: You enter a value such as "x:25.3 * m;"
+  conversions is as follows: You enter a value such as "x:25.3 * _m;"
   so that x stores the quantity 25.3 meters, and if you want to
-  convert to feet, you just do "x/ft;", that's it.  It will print out
+  convert to feet, you just do "x/_ft;", that's it.  It will print out
   the numerical value of the quantity you want in units of feet now
   instead of meters.  I do not want to go through the hastle of making
   Maxima print out the units after the result since it appears that
