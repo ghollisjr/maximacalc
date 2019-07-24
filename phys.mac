@@ -1,0 +1,872 @@
+/* TODO:
+   * Temperature conversions, best implemented with a function call
+   IMO.
+*/
+/* The base unit system I use in these definitions is the S.I. system
+  of units.
+
+  The method for using these definitions to actually do unit
+  conversions is as follows: You enter a value such as "x:25.3 * m;"
+  so that x stores the quantity 25.3 meters, and if you want to
+  convert to feet, you just do "x/ft;", that's it.  It will print out
+  the numerical value of the quantity you want in units of feet now
+  instead of meters.  I do not want to go through the hastle of making
+  Maxima print out the units after the result since it appears that
+  this is what troubles other unit packages in maxima, so this is my
+  own feeble attempt at handling units in the simplest way possible.
+
+  The metric prefixes from yocto to yotta are recognized on all SI
+  units, base and derived; for other unit systems only in special
+  cases they may be recognized.
+
+  Be careful not to try to use the unit names as variable names, as
+  this may cause errors somewhere in your calculation.*/
+/* SI system */
+/* Base Units */
+/* Length, Base unit: Meter (m)*/
+assume(_m>0);
+_dam:1e1*_m;
+_dm:1e-1*_m;
+_hm:1e2*_m;
+_cm:1e-2*_m;
+_km:1e3*_m;
+_mm:1e-3*_m;
+_Mm:1e6*_m;
+_mum:1e-6*_m;
+_Gm:1e9*_m;
+_nm:1e-9*_m;
+_Tm:1e12*_m;
+_pm:1e-12*_m;
+_Pm:1e15*_m;
+_fm:-15*_m;
+_Em:1e18*_m;
+_am:1e-18*_m;
+_Zm:1e21*_m;
+_zm:1e-21*_m;
+_Ym:1e24*_m;
+_ym:1e-24*_m;
+/* Mass, Base unit: Kilogram (kg).  For convenience, I use the gram
+  (g) as the base unit for mass here.*/
+assume(_g>0);
+_dag:1e1*_g;
+_dg:1e-1*_g;
+_hg:1e2*_g;
+_cg:1e-2*_g;
+_kg:1e3*_g;
+_mg:1e-3*_g;
+_Mg:1e6*_g;
+_mug:1e-6*_g;
+_Gg:1e9*_g;
+_ng:1e-9*_g;
+_Tg:1e12*_g;
+_pg:1e-12*_g;
+_Pg:1e15*_g;
+_fg:-15*_g;
+_Eg:1e18*_g;
+_ag:1e-18*_g;
+_Zg:1e21*_g;
+_zg:1e-21*_g;
+_Yg:1e24*_g;
+_yg:1e-24*_g;
+/* Time, Base unit: Second (s). */
+assume(_s>0);
+_das:1e1*_s;
+_ds:1e-1*_s;
+_hs:1e2*_s;
+_cs:1e-2*_s;
+_ks:1e3*_s;
+_ms:1e-3*_s;
+_Ms:1e6*_s;
+_mus:1e-6*_s;
+_Gs:1e9*_s;
+_ns:1e-9*_s;
+_Ts:1e12*_s;
+_ps:1e-12*_s;
+_Ps:1e15*_s;
+_fs:-15*_s;
+_Es:1e18*_s;
+_as:1e-18*_s;
+_Zs:1e21*_s;
+_zs:1e-21*_s;
+_Ys:1e24*_s;
+_ys:1e-24*_s;
+/* Electric Current, Base unit: Ampere (A). */
+assume(_A>0);
+_daA:1e1*_A;
+_dA:1e-1*_A;
+_hA:1e2*_A;
+_cA:1e-2*_A;
+_kA:1e3*_A;
+_mA:1e-3*_A;
+_MA:1e6*_A;
+_muA:1e-6*_A;
+_GA:1e9*_A;
+_nA:1e-9*_A;
+_TA:1e12*_A;
+_pA:1e-12*_A;
+_PA:1e15*_A;
+_fA:-15*_A;
+_EA:1e18*_A;
+_aA:1e-18*_A;
+_ZA:1e21*_A;
+_zA:1e-21*_A;
+_YA:1e24*_A;
+_yA:1e-24*_A;
+/* Temperature, Base unit: Kelvin (K). */
+assume(_K>0);
+_daK:1e1*_K;
+_dK:1e-1*_K;
+_hK:1e2*_K;
+_cK:1e-2*_K;
+_kK:1e3*_K;
+_mK:1e-3*_K;
+_MK:1e6*_K;
+_muK:1e-6*_K;
+_GK:1e9*_K;
+_nK:1e-9*_K;
+_TK:1e12*_K;
+_pK:1e-12*_K;
+_PK:1e15*_K;
+_fK:-15*_K;
+_EK:1e18*_K;
+_aK:1e-18*_K;
+_ZK:1e21*_K;
+_zK:1e-21*_K;
+_YK:1e24*_K;
+_yK:1e-24*_K;
+/* Luminous Intensity.  Base Unit: Candela (cd). */
+assume(_cd>0);
+_dacd:1e1*_cd;
+_dcd:1e-1*_cd;
+_hcd:1e2*_cd;
+_ccd:1e-2*_cd;
+_kcd:1e3*_cd;
+_mcd:1e-3*_cd;
+_Mcd:1e6*_cd;
+_mucd:1e-6*_cd;
+_Gcd:1e9*_cd;
+_ncd:1e-9*_cd;
+_Tcd:1e12*_cd;
+_pcd:1e-12*_cd;
+_Pcd:1e15*_cd;
+_fcd:-15*_cd;
+_Ecd:1e18*_cd;
+_acd:1e-18*_cd;
+_Zcd:1e21*_cd;
+_zcd:1e-21*_cd;
+_Ycd:1e24*_cd;
+_ycd:1e-24*_cd;
+/* Derived Units */
+/* Hertz */
+_Hz:_s^-1;
+_daHz:1e1*_Hz;
+_dHz:1e-1*_Hz;
+_hHz:1e2*_Hz;
+_cHz:1e-2*_Hz;
+_kHz:1e3*_Hz;
+_mHz:1e-3*_Hz;
+_MHz:1e6*_Hz;
+_muHz:1e-6*_Hz;
+_GHz:1e9*_Hz;
+_nHz:1e-9*_Hz;
+_THz:1e12*_Hz;
+_pHz:1e-12*_Hz;
+_PHz:1e15*_Hz;
+_fHz:-15*_Hz;
+_EHz:1e18*_Hz;
+_aHz:1e-18*_Hz;
+_ZHz:1e21*_Hz;
+_zHz:1e-21*_Hz;
+_YHz:1e24*_Hz;
+_yHz:1e-24*_Hz;
+/* Newton */
+_N:_kg*_m/_s^2;
+_daN:1e1*_N;
+_dN:1e-1*_N;
+_hN:1e2*_N;
+_cN:1e-2*_N;
+_kN:1e3*_N;
+_mN:1e-3*_N;
+_MN:1e6*_N;
+_muN:1e-6*_N;
+_GN:1e9*_N;
+_nN:1e-9*_N;
+_TN:1e12*_N;
+_pN:1e-12*_N;
+_PN:1e15*_N;
+_fN:-15*_N;
+_EN:1e18*_N;
+_aN:1e-18*_N;
+_ZN:1e21*_N;
+_zN:1e-21*_N;
+_YN:1e24*_N;
+_yN:1e-24*_N;
+/* Pascal */
+_Pa:_N/_m^2;
+_daPa:1e1*_Pa;
+_dPa:1e-1*_Pa;
+_hPa:1e2*_Pa;
+_cPa:1e-2*_Pa;
+_kPa:1e3*_Pa;
+_mPa:1e-3*_Pa;
+_MPa:1e6*_Pa;
+_muPa:1e-6*_Pa;
+_GPa:1e9*_Pa;
+_nPa:1e-9*_Pa;
+_TPa:1e12*_Pa;
+_pPa:1e-12*_Pa;
+_PPa:1e15*_Pa;
+_fPa:-15*_Pa;
+_EPa:1e18*_Pa;
+_aPa:1e-18*_Pa;
+_ZPa:1e21*_Pa;
+_zPa:1e-21*_Pa;
+_YPa:1e24*_Pa;
+_yPa:1e-24*_Pa;
+/* Joule */
+_J:_N*_m;
+_daJ:1e1*_J;
+_dJ:1e-1*_J;
+_hJ:1e2*_J;
+_cJ:1e-2*_J;
+_kJ:1e3*_J;
+_mJ:1e-3*_J;
+_MJ:1e6*_J;
+_muJ:1e-6*_J;
+_GJ:1e9*_J;
+_nJ:1e-9*_J;
+_TJ:1e12*_J;
+_pJ:1e-12*_J;
+_PJ:1e15*_J;
+_fJ:-15*_J;
+_EJ:1e18*_J;
+_aJ:1e-18*_J;
+_ZJ:1e21*_J;
+_zJ:1e-21*_J;
+_YJ:1e24*_J;
+_yJ:1e-24*_J;
+/* Watt */
+_W:_J/_s;
+_daW:1e1*_W;
+_dW:1e-1*_W;
+_hW:1e2*_W;
+_cW:1e-2*_W;
+_kW:1e3*_W;
+_mW:1e-3*_W;
+_MW:1e6*_W;
+_muW:1e-6*_W;
+_GW:1e9*_W;
+_nW:1e-9*_W;
+_TW:1e12*_W;
+_pW:1e-12*_W;
+_PW:1e15*_W;
+_fW:-15*_W;
+_EW:1e18*_W;
+_aW:1e-18*_W;
+_ZW:1e21*_W;
+_zW:1e-21*_W;
+_YW:1e24*_W;
+_yW:1e-24*_W;
+/* Coulomb */
+_C:_s*_A;
+_daC:1e1*_C;
+_dC:1e-1*_C;
+_hC:1e2*_C;
+_cC:1e-2*_C;
+_kC:1e3*_C;
+_mC:1e-3*_C;
+_MC:1e6*_C;
+_muC:1e-6*_C;
+_GC:1e9*_C;
+_nC:1e-9*_C;
+_TC:1e12*_C;
+_pC:1e-12*_C;
+_PC:1e15*_C;
+_fC:-15*_C;
+_EC:1e18*_C;
+_aC:1e-18*_C;
+_ZC:1e21*_C;
+_zC:1e-21*_C;
+_YC:1e24*_C;
+_yC:1e-24*_C;
+/* Volt */
+_V:_W/_A;
+_daV:1e1*_V;
+_dV:1e-1*_V;
+_hV:1e2*_V;
+_cV:1e-2*_V;
+_kV:1e3*_V;
+_mV:1e-3*_V;
+_MV:1e6*_V;
+_muV:1e-6*_V;
+_GV:1e9*_V;
+_nV:1e-9*_V;
+_TV:1e12*_V;
+_pV:1e-12*_V;
+_PV:1e15*_V;
+_fV:-15*_V;
+_EV:1e18*_V;
+_aV:1e-18*_V;
+_ZV:1e21*_V;
+_zV:1e-21*_V;
+_YV:1e24*_V;
+_yV:1e-24*_V;
+/* Farad */
+_F:_C/_V;
+_daF:1e1*_F;
+_dF:1e-1*_F;
+_hF:1e2*_F;
+_cF:1e-2*_F;
+_kF:1e3*_F;
+_mF:1e-3*_F;
+_MF:1e6*_F;
+_muF:1e-6*_F;
+_GF:1e9*_F;
+_nF:1e-9*_F;
+_TF:1e12*_F;
+_pF:1e-12*_F;
+_PF:1e15*_F;
+_fF:-15*_F;
+_EF:1e18*_F;
+_aF:1e-18*_F;
+_ZF:1e21*_F;
+_zF:1e-21*_F;
+_YF:1e24*_F;
+_yF:1e-24*_F;
+/* Ohm */
+_ohm:_V/_A;
+_daohm:1e1*_ohm;
+_dohm:1e-1*_ohm;
+_hohm:1e2*_ohm;
+_cohm:1e-2*_ohm;
+_kohm:1e3*_ohm;
+_mohm:1e-3*_ohm;
+_Mohm:1e6*_ohm;
+_muohm:1e-6*_ohm;
+_Gohm:1e9*_ohm;
+_nohm:1e-9*_ohm;
+_Tohm:1e12*_ohm;
+_pohm:1e-12*_ohm;
+_Pohm:1e15*_ohm;
+_fohm:-15*_ohm;
+_Eohm:1e18*_ohm;
+_aohm:1e-18*_ohm;
+_Zohm:1e21*_ohm;
+_zohm:1e-21*_ohm;
+_Yohm:1e24*_ohm;
+_yohm:1e-24*_ohm;
+/* Seimens */
+_S:1/_ohm;
+_daS:1e1*_S;
+_dS:1e-1*_S;
+_hS:1e2*_S;
+_cS:1e-2*_S;
+_kS:1e3*_S;
+_mS:1e-3*_S;
+_MS:1e6*_S;
+_muS:1e-6*_S;
+_GS:1e9*_S;
+_nS:1e-9*_S;
+_TS:1e12*_S;
+_pS:1e-12*_S;
+_PS:1e15*_S;
+_fS:-15*_S;
+_ES:1e18*_S;
+_aS:1e-18*_S;
+_ZS:1e21*_S;
+_zS:1e-21*_S;
+_YS:1e24*_S;
+_yS:1e-24*_S;
+/* Weber */
+_Wb:_J/_A;
+_daWb:1e1*_Wb;
+_dWb:1e-1*_Wb;
+_hWb:1e2*_Wb;
+_cWb:1e-2*_Wb;
+_kWb:1e3*_Wb;
+_mWb:1e-3*_Wb;
+_MWb:1e6*_Wb;
+_muWb:1e-6*_Wb;
+_GWb:1e9*_Wb;
+_nWb:1e-9*_Wb;
+_TWb:1e12*_Wb;
+_pWb:1e-12*_Wb;
+_PWb:1e15*_Wb;
+_fWb:-15*_Wb;
+_EWb:1e18*_Wb;
+_aWb:1e-18*_Wb;
+_ZWb:1e21*_Wb;
+_zWb:1e-21*_Wb;
+_YWb:1e24*_Wb;
+_yWb:1e-24*_Wb;
+/* Tesla */
+_T:_V*_s/_m^2;
+_daT:1e1*_T;
+_dT:1e-1*_T;
+_hT:1e2*_T;
+_cT:1e-2*_T;
+_kT:1e3*_T;
+_mT:1e-3*_T;
+_MT:1e6*_T;
+_muT:1e-6*_T;
+_GT:1e9*_T;
+_nT:1e-9*_T;
+_TT:1e12*_T;
+_pT:1e-12*_T;
+_PT:1e15*_T;
+_fT:-15*_T;
+_ET:1e18*_T;
+_aT:1e-18*_T;
+_ZT:1e21*_T;
+_zT:1e-21*_T;
+_YT:1e24*_T;
+_yT:1e-24*_T;
+/* Henry */
+_H:_V*_s/_A;
+_daH:1e1*_H;
+_dH:1e-1*_H;
+_hH:1e2*_H;
+_cH:1e-2*_H;
+_kH:1e3*_H;
+_mH:1e-3*_H;
+_MH:1e6*_H;
+_muH:1e-6*_H;
+_GH:1e9*_H;
+_nH:1e-9*_H;
+_TH:1e12*_H;
+_pH:1e-12*_H;
+_PH:1e15*_H;
+_fH:-15*_H;
+_EH:1e18*_H;
+_aH:1e-18*_H;
+_ZH:1e21*_H;
+_zH:1e-21*_H;
+_YH:1e24*_H;
+_yH:1e-24*_H;
+/* Lumen */
+_lm:_cd;
+_dalm:1e1*_lm;
+_dlm:1e-1*_lm;
+_hlm:1e2*_lm;
+_clm:1e-2*_lm;
+_klm:1e3*_lm;
+_mlm:1e-3*_lm;
+_Mlm:1e6*_lm;
+_mulm:1e-6*_lm;
+_Glm:1e9*_lm;
+_nlm:1e-9*_lm;
+_Tlm:1e12*_lm;
+_plm:1e-12*_lm;
+_Plm:1e15*_lm;
+_flm:-15*_lm;
+_Elm:1e18*_lm;
+_alm:1e-18*_lm;
+_Zlm:1e21*_lm;
+_zlm:1e-21*_lm;
+_Ylm:1e24*_lm;
+_ylm:1e-24*_lm;
+/* Lux */
+_lx:_lm/_m^2;
+_dalx:1e1*_lx;
+_dlx:1e-1*_lx;
+_hlx:1e2*_lx;
+_clx:1e-2*_lx;
+_klx:1e3*_lx;
+_mlx:1e-3*_lx;
+_Mlx:1e6*_lx;
+_mulx:1e-6*_lx;
+_Glx:1e9*_lx;
+_nlx:1e-9*_lx;
+_Tlx:1e12*_lx;
+_plx:1e-12*_lx;
+_Plx:1e15*_lx;
+_flx:-15*_lx;
+_Elx:1e18*_lx;
+_alx:1e-18*_lx;
+_Zlx:1e21*_lx;
+_zlx:1e-21*_lx;
+_Ylx:1e24*_lx;
+_ylx:1e-24*_lx;
+/* Becquerel */
+_Bq:1/_s;
+_daBq:1e1*_Bq;
+_dBq:1e-1*_Bq;
+_hBq:1e2*_Bq;
+_cBq:1e-2*_Bq;
+_kBq:1e3*_Bq;
+_mBq:1e-3*_Bq;
+_MBq:1e6*_Bq;
+_muBq:1e-6*_Bq;
+_GBq:1e9*_Bq;
+_nBq:1e-9*_Bq;
+_TBq:1e12*_Bq;
+_pBq:1e-12*_Bq;
+_PBq:1e15*_Bq;
+_fBq:-15*_Bq;
+_EBq:1e18*_Bq;
+_aBq:1e-18*_Bq;
+_ZBq:1e21*_Bq;
+_zBq:1e-21*_Bq;
+_YBq:1e24*_Bq;
+_yBq:1e-24*_Bq;
+/* Gray */
+_Gy:_J/_kg;
+_daGy:1e1*_Gy;
+_dGy:1e-1*_Gy;
+_hGy:1e2*_Gy;
+_cGy:1e-2*_Gy;
+_kGy:1e3*_Gy;
+_mGy:1e-3*_Gy;
+_MGy:1e6*_Gy;
+_muGy:1e-6*_Gy;
+_GGy:1e9*_Gy;
+_nGy:1e-9*_Gy;
+_TGy:1e12*_Gy;
+_pGy:1e-12*_Gy;
+_PGy:1e15*_Gy;
+_fGy:-15*_Gy;
+_EGy:1e18*_Gy;
+_aGy:1e-18*_Gy;
+_ZGy:1e21*_Gy;
+_zGy:1e-21*_Gy;
+_YGy:1e24*_Gy;
+_yGy:1e-24*_Gy;
+/* Sievert */
+_Sv:_J/_kg;
+_daSv:1e1*_Sv;
+_dSv:1e-1*_Sv;
+_hSv:1e2*_Sv;
+_cSv:1e-2*_Sv;
+_kSv:1e3*_Sv;
+_mSv:1e-3*_Sv;
+_MSv:1e6*_Sv;
+_muSv:1e-6*_Sv;
+_GSv:1e9*_Sv;
+_nSv:1e-9*_Sv;
+_TSv:1e12*_Sv;
+_pSv:1e-12*_Sv;
+_PSv:1e15*_Sv;
+_fSv:-15*_Sv;
+_ESv:1e18*_Sv;
+_aSv:1e-18*_Sv;
+_ZSv:1e21*_Sv;
+_zSv:1e-21*_Sv;
+_YSv:1e24*_Sv;
+_ySv:1e-24*_Sv;
+/* Katal */
+_kat:_mol/_s;
+_dakat:1e1*_kat;
+_dkat:1e-1*_kat;
+_hkat:1e2*_kat;
+_ckat:1e-2*_kat;
+_kkat:1e3*_kat;
+_mkat:1e-3*_kat;
+_Mkat:1e6*_kat;
+_mukat:1e-6*_kat;
+_Gkat:1e9*_kat;
+_nkat:1e-9*_kat;
+_Tkat:1e12*_kat;
+_pkat:1e-12*_kat;
+_Pkat:1e15*_kat;
+_fkat:-15*_kat;
+_Ekat:1e18*_kat;
+_akat:1e-18*_kat;
+_Zkat:1e21*_kat;
+_zkat:1e-21*_kat;
+_Ykat:1e24*_kat;
+_ykat:1e-24*_kat;
+/* End SI units */
+/* Metric Non-SI units */
+/* Minute */
+_min:60*_s;
+/* Hour */
+_h:60*_min;
+/* Day */
+_d:24*_h;
+/* Year */
+_yr:365.25*_d;
+/* Hectare */
+_ha:1*_hm^2;
+/* Litre */
+_L:1*_dm^3;
+_daL:1e1*_L;
+_dL:1e-1*_L;
+_hL:1e2*_L;
+_cL:1e-2*_L;
+_kL:1e3*_L;
+_mL:1e-3*_L;
+_ML:1e6*_L;
+_muL:1e-6*_L;
+_GL:1e9*_L;
+_nL:1e-9*_L;
+_TL:1e12*_L;
+_pL:1e-12*_L;
+_PL:1e15*_L;
+_fL:-15*_L;
+_EL:1e18*_L;
+_aL:1e-18*_L;
+_ZL:1e21*_L;
+_zL:1e-21*_L;
+_YL:1e24*_L;
+_yL:1e-24*_L;
+/* Tonne */
+_tonne:1*_Mg;
+/* Atomic Mass Unit and Dalton*/
+_u:1.6605388628e-27*_kg;
+_Da:_u;
+/* Angstrom */
+_angstrom:0.1*_nm;
+/* Barn */
+_barn:10^-28*_m^2;
+_mbarn:1e-3*_barn;
+/* Bar */
+_bar:10^5*_Pa;
+_mbar:100*_Pa;
+/* Atmosphere */
+_atm:101325*_Pa;
+/* Milimetre of mercury */
+_mmHg:133.322387415*_Pa;
+/* Torr */
+_Torr:133.322368421*_Pa;
+/* End Metric Units */
+/* U.S. Customary Units */
+/* Inch */
+_in:2.54*_cm;
+/* Foot */
+_ft:12*_in;
+/* Yard */
+_yd:3*_ft;
+/* Mile */
+_mi:5280*_ft;
+/* Nautical mile */
+_nmi:1.151*_mi;
+/* Acre */
+_acre:4046.873*_m^2;
+/* U.S. Fluid Volumes */
+/* Teaspoon */
+_tsp:4.928921*_mL;
+/* Tablespoon */
+_Tbsp:3*_tsp;
+/* U.S. Fluid Ounce */
+_floz:2*_Tbsp;
+/* U.S. Cup */
+_cp:8*_floz;
+/* U.S. Pint */
+_pt:2*_cp;
+/* U.S. Quart */
+_qt:2*_pt;
+/* U.S. Gallon */
+_gal:4*_qt;
+/* End U.S. fluid volumes */
+/* U.S. Units of mass */
+/* Pound */
+_lb:453.59237*_g;
+/* Grain */
+_gr:1/7000*_lb;
+/* Dram */
+_dr:(27+11/32)*_gr;
+/* Ounce */
+_oz:16*_dr;
+/* Short ton */
+_ton:2000*_lb;
+/* Long ton */
+_longton:2240*_lb;
+/* Physical Constants */
+/* Speed of light in vacuum */
+%c:299792458*_m/_s;
+/* Newtonian Gravitational Constant */
+%G:6.6738480e-11*_m^3*_kg^-1*_s^-2;
+/* Planck Constant */
+%h:6.6260695729e-34*_J*_s;
+/* Reduced Planck Constant */
+%hbar:1.05457172647e-34*_J*_s;
+/* Permeability of free space */
+%mu0:4*%pi*10^-7*_N/_A^2;
+/* Electric Constant */
+%eps0:1/(%mu0*%c^2);
+/* Impedance of Vacuum */
+%Z0:%mu0*%c;
+/* Coulomb's Constant */
+%ke:1/(4*%pi*%eps0);
+/* Elementary Charge */
+%ech:1.60217656535e-19*_C;
+/* Bohr Magneton */
+%muB:9.2740096820e-24*_J/_T;
+/* Bohr Radius */
+%a0:5.291772109217e-11*_m;
+/* Classical Electron Radius */
+%re:2.817940326727e-15*_m;
+/* Electron Mass */
+%me:9.1093829140e-31*_kg;
+/* Fine Structure Constant */
+%alpha:%ech^2/(4*%pi*%eps0*%hbar*%c);
+/* Proton mass */
+%mp:1.67262177774e-27*_kg;
+/* Neutron Mass */
+%mn:1.67492735174e-27*_kg;
+/* Deuteron Mass */
+%md:3.34358348e-27*_kg;
+/* Rydberg Constant */
+%Rinf:%alpha^2*%me*%c/(2*%h);
+/* Avogadro's Number */
+%NA:6.0221412927e23;
+/* Boltzmann constant */
+%kB:1.380648813e-23*_J/_K;
+/* Ideal Gas Constant */
+%R:8.314462175*_J*_K^-1*_mol^-1;
+/* Stefan-Boltzmann Constant */
+%sigma:%pi^2*%kB^4/(60*%hbar^3*%c^2);
+/* Standard Gravitational Acceleration */
+%ga:9.80665*_m/_s^2;
+/* End Physical Constants */
+/* Mole (mol).  The mole is a special unit in that it counts the
+  number of things.  In this case, I do define the mole to be
+  Avogadro's number, NA. */
+_mol:%NA;
+_damol:1e1*_mol;
+_dmol:1e-1*_mol;
+_hmol:1e2*_mol;
+_cmol:1e-2*_mol;
+_kmol:1e3*_mol;
+_mmol:1e-3*_mol;
+_Mmol:1e6*_mol;
+_mumol:1e-6*_mol;
+_Gmol:1e9*_mol;
+_nmol:1e-9*_mol;
+_Tmol:1e12*_mol;
+_pmol:1e-12*_mol;
+_Pmol:1e15*_mol;
+_fmol:-15*_mol;
+_Emol:1e18*_mol;
+_amol:1e-18*_mol;
+_Zmol:1e21*_mol;
+_zmol:1e-21*_mol;
+_Ymol:1e24*_mol;
+_ymol:1e-24*_mol;
+/* Pound Force */
+_lbf:%ga*_lb;
+/* Miles Per Hour */
+_mph:_mi/_h;
+/* Kilometers Per Hour */
+_kph:_km/_h;
+/* Speed of Sound at Sea Level, 15 Centigrade */
+%vsound:340.29*_m/_s;
+/* Freezing Point of water in Kelvins */
+%T0:273.15*_K;
+/* Convert from Farenheit to Celsius */
+assume(_degF>0);
+assume(_degC>0);
+FtoC(T):=5/9*(T/_degF-32)*_degC;
+/* Convert from Celsius to Farenheit */
+CtoF(T):=9/5*T*_degF/_degC+32*_degF;
+/* Convert from Celsius to Kelvins */
+CtoK(T):=T*_K/_degC+%T0;
+/* Convert from Kelvins to Celsius */
+KtoC(T):=(T-%T0)*_degC/_K;
+/* Convert from Kelvins to Farenheit */
+KtoF(T):=CtoF(KtoC(T));
+/* Convert from Farenheit to Kelvins */
+FtoK(T):=CtoK(FtoC(T));
+/* Electron-Volt */
+_eV:%ech*_V;
+_daeV:1e1*_eV;
+_deV:1e-1*_eV;
+_heV:1e2*_eV;
+_ceV:1e-2*_eV;
+_keV:1e3*_eV;
+_meV:1e-3*_eV;
+_MeV:1e6*_eV;
+_mueV:1e-6*_eV;
+_GeV:1e9*_eV;
+_neV:1e-9*_eV;
+_TeV:1e12*_eV;
+_peV:1e-12*_eV;
+_PeV:1e15*_eV;
+_feV:-15*_eV;
+_EeV:1e18*_eV;
+_aeV:1e-18*_eV;
+_ZeV:1e21*_eV;
+_zeV:1e-21*_eV;
+_YeV:1e24*_eV;
+_yeV:1e-24*_eV;
+/* Horsepower */
+_hp:33000*_ft*_lbf/_min;
+/* Dyne */
+_dyn:10*_muN;
+cou(x,units):=block(
+	/* tmpu:rat(sort(units,ordergreatp)), this would be for sorted units,*/
+	tmpu:rat(units),
+	result:makelist(0,k,1,length(tmpu)),
+	tmp:rat(x),
+	for i in makelist(k,k,1,length(result)-1) do
+	(result[i]:floor(rat(tmp/tmpu[i])),
+	tmp:rat((tmp/tmpu[i]-result[i])*tmpu[i])),
+	result[length(result)]:rat(tmp/tmpu[length(result)]),
+	result);
+/* Binary Units */
+_KiB:1024*_B;
+_MiB:1024*_KiB;
+_GiB:1024*_MiB;
+_TiB:1024*_GiB;
+_kB:1000*_B;
+_MB:1000*_kB;
+_GB:1000*_MB;
+_TB:1000*_GB;
+/* Light-year */
+_ly:_yr*%c;
+/* Astronomical Unit */
+_ua:149597870.700*_km;
+/* Parsec */
+_pc:_ua/tan(%pi/(180*3600));
+_dapc:1e1*_pc;
+_dpc:1e-1*_pc;
+_hpc:1e2*_pc;
+_cpc:1e-2*_pc;
+_kpc:1e3*_pc;
+_mpc:1e-3*_pc;
+_Mpc:1e6*_pc;
+_mupc:1e-6*_pc;
+_Gpc:1e9*_pc;
+_npc:1e-9*_pc;
+_Tpc:1e12*_pc;
+_ppc:1e-12*_pc;
+_Ppc:1e15*_pc;
+_fpc:-15*_pc;
+_Epc:1e18*_pc;
+_apc:1e-18*_pc;
+_Zpc:1e21*_pc;
+_zpc:1e-21*_pc;
+_Ypc:1e24*_pc;
+_ypc:1e-24*_pc;
+/* Calorie: */
+_cal:4.184*_J;
+_dacal:1e1*_cal;
+_dcal:1e-1*_cal;
+_hcal:1e2*_cal;
+_ccal:1e-2*_cal;
+_kcal:1e3*_cal;
+_mcal:1e-3*_cal;
+_Mcal:1e6*_cal;
+_mucal:1e-6*_cal;
+_Gcal:1e9*_cal;
+_ncal:1e-9*_cal;
+_Tcal:1e12*_cal;
+_pcal:1e-12*_cal;
+_Pcal:1e15*_cal;
+_fcal:-15*_cal;
+_Ecal:1e18*_cal;
+_acal:1e-18*_cal;
+_Zcal:1e21*_cal;
+_zcal:1e-21*_cal;
+_Ycal:1e24*_cal;
+_ycal:1e-24*_cal;
+/* Food calorie / kcal:*/
+_Cal : _kcal;
+/* Radians: rad */
+_rad : 1;
+_mrad : 1e-3;
+/* Revolutions per minute: rpm */
+_rpm : 2*%pi*_rad/_min;
+/* Useful quantities */
+%Rearth:3958.8*_mi;
+%Mearth:1.317e25*_lb;
