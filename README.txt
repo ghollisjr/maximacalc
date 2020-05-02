@@ -25,4 +25,5 @@ purposes, such as getting the binary digits of a number, e.g. "cou(15,
 
 The bash script "maximacalc.sh" is a launcher script for maxima using
 phys.mac which uses the rxvt-unicode terminal to create a bare-bones
-but very effective calculator for all kinds of purposes.
+but very effective calculator for all kinds of purposes.  Edit the
+script with your preferred phys.mac location.

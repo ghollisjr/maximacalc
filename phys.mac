@@ -607,6 +607,7 @@ _YL:1e24*_L;
 _yL:1e-24*_L;
 /* Tonne */
 _tonne:1*_Mg;
+
 /* Atomic Mass Unit and Dalton*/
 _u:1.6605388628e-27*_kg;
 _Da:_u;
@@ -616,8 +617,9 @@ _angstrom:0.1*_nm;
 _barn:10^-28*_m^2;
 _mbarn:1e-3*_barn;
 /* Bar */
-_bar:10^5*_Pa;
-_mbar:100*_Pa;
+_bar:100*_kPa;
+_mbar:1e-3*_bar;
+_kbar:1e3*_bar;
 /* Atmosphere */
 _atm:101325*_Pa;
 /* Milimetre of mercury */
