@@ -747,6 +747,8 @@ _lbf:%ga*_lb;
 _mph:_mi/_h;
 /* Kilometers Per Hour */
 _kph:_km/_h;
+/* Nautical Miles Per Hour (knot) */
+_knot:_nmi/_h;
 /* Speed of Sound at Sea Level, 15 Centigrade */
 %vsound:340.29*_m/_s;
 /* Freezing Point of water in Kelvins */
