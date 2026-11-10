@@ -27,3 +27,14 @@ The bash script "maximacalc.sh" is a launcher script for maxima using
 phys.mac which uses the rxvt-unicode terminal to create a bare-bones
 but very effective calculator for all kinds of purposes.  Edit the
 script with your preferred phys.mac location.
+
+Currencies are available as units named by their lower case ISO 4217
+codes, such as "_usd", "_eur" and "_jpy", so "100*_usd/_jpy" gives the
+value of 100 U.S. dollars in yen.  The U.S. dollar is the base unit.  The exchange rates are the European Central
+Bank's daily reference rates, which "currency.lisp" downloads with
+curl and caches in the Maxima user directory for a day; keep
+"currency.lisp" in the same directory as "phys.mac" (a symbolic link
+to "phys.mac" from elsewhere is fine).  The variable "currency_date"
+holds the date of the rates in use, and "update_currencies(true)"
+forces a fresh download.  Without a network connection the last
+downloaded rates are used.

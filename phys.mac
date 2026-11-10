@@ -872,3 +872,35 @@ _rpm : 2*%pi*_rad/_min;
 %Mearth:1.317e25*_lb;
 %Mmoon:1.619e23*_lb;
 %Rmoon:1079.6*_mi;
+/* Currency.  Base unit: U.S. dollar (usd).
+
+  Every currency is named by its ISO 4217 code in lower case,
+  e.g. _usd, _eur, _gbp, _jpy, so that "100*_usd/_jpy" is the value of
+  100 U.S. dollars in yen.
+
+  The exchange rates are the European Central Bank's daily reference
+  rates, fetched by currency.lisp (which must be in the same directory
+  as this file) and cached in the Maxima user directory for a day.
+  currency_date holds the date of the rates in use.  If the rates are
+  unavailable (no network and no cache), only _usd is defined.
+
+  Call update_currencies(true) to force a fresh download. */
+assume(_usd>0);
+update_currencies([force]) :=
+  block([rates, usd_per_eur: false],
+    /* The ECB quotes every currency per euro; rebase onto the dollar. */
+    rates: currency_rates(not emptyp(force)),
+    for p in rates do
+      if p[1] = "USD" then usd_per_eur: p[2],
+    if usd_per_eur # false then
+      (_eur : usd_per_eur*_usd,
+       for p in rates do
+         if p[1] # "USD" then
+           (concat('_, sdowncase(p[1])) :: usd_per_eur*_usd/p[2])),
+    currency_date);
+block([lisp_file],
+  lisp_file: sconcat(pathname_directory(?namestring(?truename(load_pathname))),
+                     "currency.lisp"),
+  if file_search(lisp_file) # false
+  then (load(lisp_file), update_currencies())
+  else print("phys.mac: currency.lisp not found, currencies not loaded"))$
