@@ -38,3 +38,6 @@ to "phys.mac" from elsewhere is fine).  The variable "currency_date"
 holds the date of the rates in use, and "update_currencies(true)"
 forces a fresh download.  Without a network connection the last
 downloaded rates are used.
+
+The function "norminv" is the inverse CDF of the standard normal
+distribution, e.g. "norminv(0.975)" returns about 1.96.

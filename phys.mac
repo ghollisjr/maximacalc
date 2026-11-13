@@ -872,6 +872,16 @@ _rpm : 2*%pi*_rad/_min;
 %Mearth:1.317e25*_lb;
 %Mmoon:1.619e23*_lb;
 %Rmoon:1079.6*_mi;
+/* Statistics */
+/* Inverse CDF (quantile function) of the standard normal
+  distribution: norminv(p) is the z for which a standard normal
+  variable is below z with probability p, e.g. norminv(0.975) is
+  about 1.96.  It is sqrt(2)*inverse_erf(2*p-1), written with
+  inverse_erfc so that very small p keeps its precision. */
+norminv(p) := block([z: -inverse_erfc(2*p)],
+  if floatnump(p) then float(sqrt(2)*z)
+  elseif bfloatp(p) then bfloat(sqrt(2)*z)
+  else sqrt(2)*z);
 /* Currency.  Base unit: U.S. dollar (usd).
 
   Every currency is named by its ISO 4217 code in lower case,
