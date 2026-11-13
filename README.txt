@@ -39,5 +39,6 @@ holds the date of the rates in use, and "update_currencies(true)"
 forces a fresh download.  Without a network connection the last
 downloaded rates are used.
 
-The function "norminv" is the inverse CDF of the standard normal
-distribution, e.g. "norminv(0.975)" returns about 1.96.
+The function "normcdf" is the CDF of the standard normal distribution
+and "norminv" is its inverse, e.g. "normcdf(1.96)" returns about 0.975
+and "norminv(0.975)" returns about 1.96.

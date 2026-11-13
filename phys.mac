@@ -877,11 +877,25 @@ _rpm : 2*%pi*_rad/_min;
   distribution: norminv(p) is the z for which a standard normal
   variable is below z with probability p, e.g. norminv(0.975) is
   about 1.96.  It is sqrt(2)*inverse_erf(2*p-1), written with
-  inverse_erfc so that very small p keeps its precision. */
-norminv(p) := block([z: -inverse_erfc(2*p)],
-  if floatnump(p) then float(sqrt(2)*z)
-  elseif bfloatp(p) then bfloat(sqrt(2)*z)
-  else sqrt(2)*z);
+  inverse_erfc so that very small p keeps its precision.  norminv(0)
+  is minf and norminv(1) is inf. */
+norminv(p) := block([z],
+  if numberp(p) and is(equal(p, 0)) then minf
+  elseif numberp(p) and is(equal(p, 1)) then inf
+  else (z: -inverse_erfc(2*p),
+        if floatnump(p) then float(sqrt(2)*z)
+        elseif bfloatp(p) then bfloat(sqrt(2)*z)
+        else sqrt(2)*z));
+/* CDF of the standard normal distribution: normcdf(z) is the
+  probability that a standard normal variable is below z,
+  e.g. normcdf(1.96) is about 0.975.  It is (1+erf(z/sqrt(2)))/2,
+  written with erfc so that the lower tail keeps its precision. */
+normcdf(z) := block([p: erfc(-z/sqrt(2))/2],
+  if z = inf then 1
+  elseif z = minf then 0
+  elseif floatnump(z) then float(p)
+  elseif bfloatp(z) then bfloat(p)
+  else p);
 /* Currency.  Base unit: U.S. dollar (usd).
 
   Every currency is named by its ISO 4217 code in lower case,
