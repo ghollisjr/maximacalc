@@ -878,9 +878,11 @@ _rpm : 2*%pi*_rad/_min;
   variable is below z with probability p, e.g. norminv(0.975) is
   about 1.96.  It is sqrt(2)*inverse_erf(2*p-1), written with
   inverse_erfc so that very small p keeps its precision.  norminv(0)
-  is minf and norminv(1) is inf. */
+  is minf and norminv(1) is inf; p outside 0 to 1 is an error. */
 norminv(p) := block([z],
-  if numberp(p) and is(equal(p, 0)) then minf
+  if is(p < 0) = true or is(p > 1) = true
+  then error("norminv: probability must be between 0 and 1, got", p)
+  elseif numberp(p) and is(equal(p, 0)) then minf
   elseif numberp(p) and is(equal(p, 1)) then inf
   else (z: -inverse_erfc(2*p),
         if floatnump(p) then float(sqrt(2)*z)
